@@ -24,3 +24,177 @@ node server.js
 ```
 
 Then open your browser to `localhost:8000/graphql` to see the GraphiQL IDE.
+
+Here's some example queries:
+
+<table>
+    <tr>
+        <th>Query</th>
+        <th>Response</th>
+    </tr>
+    <tr>
+        <td style="vertical-align:top">
+            <pre>
+query {
+  feature
+}
+            </pre>
+        </td>
+        <td style="vertical-align:top">
+            <pre>
+{
+    "data": {
+        "feature": {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        102,
+                        0
+                    ],
+                    [
+                        103,
+                        1
+                    ],
+                    [
+                        104,
+                        0
+                    ],
+                    [
+                        105,
+                        1
+                    ]
+                ]
+            },
+            "properties": {
+                "prop0": "value0",
+                "prop1": 0,
+                "prop3": "dummy"
+            }
+        }
+    }
+}
+            </pre>
+        </td>
+    </tr>
+</table>
+
+And some example mutations (note how we can use literals):
+
+<table>
+    <tr>
+        <th>Query</th>
+        <th>Response</th>
+    </tr>
+    <tr>
+        <td style="vertical-align:top">
+            <pre>
+mutation {
+  setFeatureCollection(featureCollection:{
+    type: "FeatureCollection",
+    features: [
+        {
+            type: "Feature",
+            geometry: {
+                type: "LineString",
+                coordinates: [
+                    [0,0], [1,1]
+                ]
+            },
+            properties: {
+                prop0: "value0",
+                prop1: 0.0
+            }
+        }
+    ]
+})
+}
+            </pre>
+        </td>
+        <td style="vertical-align:top">
+            <pre>
+{
+  "data": {
+    "setFeatureCollection": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          },
+          "properties": {
+            "prop0": "value0",
+            "prop1": 0
+          }
+        }
+      ]
+    }
+  }
+}
+            </pre>
+        </td>
+    </tr>
+</table>
+
+What does error handling look like?
+
+<table>
+    <tr>
+        <th>Query</th>
+        <th>Response</th>
+    </tr>
+    <tr>
+        <td style="vertical-align:top">
+            <pre>
+mutation {
+  setFeatureCollection(featureCollection:{
+    type: "FeatureCollection",
+    features: [
+        {
+            type: "Feature",
+            geometry: {
+                type: "LineString",
+                coordinates: [
+                ]
+            },
+            properties: {
+                prop0: "value0",
+                prop1: 0.0
+            }
+        }
+    ]
+})
+}
+            </pre>
+        </td>
+        <td style="vertical-align:top">
+            <pre>
+{
+  "errors": [
+    {
+      "message": "Expected value of type \"FeatureCollection\", found {type: \"FeatureCollection\", features: [{type: \"Feature\", geometry: {type: \"LineString\", coordinates: []}, properties: {prop0: \"value0\", prop1: 0.0}}]}; at 0: coordinates must have at least two elements",
+      "locations": [
+        {
+          "line": 2,
+          "column": 42
+        }
+      ]
+    }
+  ]
+}
+            </pre>
+        </td>
+    </tr>
+</table>
