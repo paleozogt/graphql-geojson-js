@@ -10,13 +10,19 @@ exports.Feature = new GraphQLScalarType({
         return ensureObject(this.Feature.name, value)
     },
     parseValue: (value) => {
-        return ensureObject(this.Feature.name, value)
-    },
-    parseLiteral: (ast, variables) => {
-        const parsed = parseObject(this.Feature.name, ast, variables);
+        value = ensureObject(this.Feature.name, value);
         const err = gjv.isFeature(parsed, true)
         if (err == "") {
-            return parsed;
+            return value;
+        } else {
+            throw new TypeError(err)
+        }
+    },
+    parseLiteral: (ast, variables) => {
+        const value = parseObject(this.Feature.name, ast, variables);
+        const err = gjv.isFeature(value, true)
+        if (err == "") {
+            return value;
         } else {
             throw new TypeError(err)
         }
@@ -31,13 +37,19 @@ exports.FeatureCollection = new GraphQLScalarType({
         return ensureObject(this.FeatureCollection.name, value)
     },
     parseValue: (value) => {
-        return ensureObject(this.FeatureCollection.name, value)
+        value = ensureObject(this.FeatureCollection.name, value);
+        const err = gjv.isFeatureCollection(value, true)
+        if (err == "") {
+            return value;
+        } else {
+            throw new TypeError(err)
+        }
     },
     parseLiteral: (ast, variables) => {
-        const parsed = parseObject(this.FeatureCollection.name, ast, variables);
-        const err = gjv.isFeatureCollection(parsed, true)
+        const value = parseObject(this.FeatureCollection.name, ast, variables);
+        const err = gjv.isFeatureCollection(value, true)
         if (err == "") {
-            return parsed;
+            return value;
         } else {
             throw new TypeError(err)
         }

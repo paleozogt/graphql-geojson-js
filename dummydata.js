@@ -1,15 +1,13 @@
 exports.dummyFeature = {
     type: "Feature",
     geometry: {
-        type: "LineString",
+        type: "Point",
         coordinates: [
-            [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
+            [125.6, 10.1]
         ]
     },
     properties: {
-        prop0: "value0",
-        prop1: 0.0,
-        prop3: "dummy"
+        name: "Dinagat Islands"
     }
 }
 

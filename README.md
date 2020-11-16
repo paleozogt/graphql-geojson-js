@@ -43,44 +43,30 @@ query {
         <td style="vertical-align:top">
             <pre>
 {
-    "data": {
-        "feature": {
-            "type": "Feature",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [
-                        102,
-                        0
-                    ],
-                    [
-                        103,
-                        1
-                    ],
-                    [
-                        104,
-                        0
-                    ],
-                    [
-                        105,
-                        1
-                    ]
-                ]
-            },
-            "properties": {
-                "prop0": "value0",
-                "prop1": 0,
-                "prop3": "dummy"
-            }
-        }
+  "data": {
+    "feature": {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          [
+            125.6,
+            10.1
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Dinagat Islands"
+      }
     }
+  }
 }
             </pre>
         </td>
     </tr>
 </table>
 
-And some example mutations (note how we can use literals):
+And some example mutations:
 
 <table>
     <tr>
@@ -90,29 +76,12 @@ And some example mutations (note how we can use literals):
     <tr>
         <td style="vertical-align:top">
             <pre>
-mutation {
-  setFeatureCollection(featureCollection:{
-    type: "FeatureCollection",
-    features: [
-        {
-            type: "Feature",
-            geometry: {
-                type: "LineString",
-                coordinates: [
-                    [0,0], [1,1]
-                ]
-            },
-            properties: {
-                prop0: "value0",
-                prop1: 0.0
-            }
-        }
-    ]
-})
+mutation setFeatureCollection($featureCollection: FeatureCollection!) {
+  setFeatureCollection(featureCollection:$featureCollection)
 }
             </pre>
         </td>
-        <td style="vertical-align:top">
+        <td style="vertical-align:top" rowspan="2">
             <pre>
 {
   "data": {
@@ -122,26 +91,40 @@ mutation {
         {
           "type": "Feature",
           "geometry": {
-            "type": "LineString",
+            "type": "Point",
             "coordinates": [
-              [
-                0,
-                0
-              ],
-              [
-                1,
-                1
-              ]
+              125.6,
+              10.1
             ]
           },
           "properties": {
-            "prop0": "value0",
-            "prop1": 0
+            "name": "Dinagat Islands"
           }
         }
       ]
     }
   }
+}
+            </pre>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align:top">
+            <pre>
+{
+	"featureCollection": {
+		"type": "FeatureCollection",
+		"features": [{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [125.6, 10.1]
+			},
+			"properties": {
+				"name": "Dinagat Islands"
+			}
+		}]
+	}
 }
             </pre>
         </td>
@@ -158,37 +141,21 @@ What does error handling look like?
     <tr>
         <td style="vertical-align:top">
             <pre>
-mutation {
-  setFeatureCollection(featureCollection:{
-    type: "FeatureCollection",
-    features: [
-        {
-            type: "Feature",
-            geometry: {
-                type: "LineString",
-                coordinates: [
-                ]
-            },
-            properties: {
-                prop0: "value0",
-                prop1: 0.0
-            }
-        }
-    ]
-})
+mutation setFeatureCollection($featureCollection: FeatureCollection!) {
+  setFeatureCollection(featureCollection:$featureCollection)
 }
             </pre>
         </td>
-        <td style="vertical-align:top">
+        <td style="vertical-align:top" rowspan="2">
             <pre>
 {
   "errors": [
     {
-      "message": "Expected value of type \"FeatureCollection\", found {type: \"FeatureCollection\", features: [{type: \"Feature\", geometry: {type: \"LineString\", coordinates: []}, properties: {prop0: \"value0\", prop1: 0.0}}]}; at 0: coordinates must have at least two elements",
+      "message": "Variable \"$featureCollection\" got invalid value { type: \"FeatureCollection\", features: [[Object]] }; Expected type \"FeatureCollection\". at 0: Position must be at least two elements",
       "locations": [
         {
-          "line": 2,
-          "column": 42
+          "line": 1,
+          "column": 31
         }
       ]
     }
@@ -197,4 +164,26 @@ mutation {
             </pre>
         </td>
     </tr>
+    <tr>
+        <td style="vertical-align:top">
+            <pre>
+{
+	"featureCollection": {
+		"type": "FeatureCollection",
+		"features": [{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": []
+			},
+			"properties": {
+				"name": "Dinagat Islands"
+			}
+		}]
+	}
+}
+            </pre>
+        </td>
+    </tr>
 </table>
+
